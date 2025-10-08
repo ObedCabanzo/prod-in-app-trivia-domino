@@ -16,10 +16,6 @@
       brazeBridge.logCustomEvent("trivia-impression");
       brazeBridge.requestImmediateDataFlush();
 
-      const offlineAbortBtn = document.getElementById("offline-abort");
-      const tooMuchDelayAbandonBtn = document.getElementById(
-        "too-much-delay-abandon-btn"
-      );
       const closeBtn = document.getElementById("close-button");
       closeBtn.addEventListener("click", function () {
         brazeBridge.logClick("close-button-screen-" + getScreen());
@@ -46,15 +42,14 @@
       });
 
       playButtonStatic.addEventListener("click", function () {
+        brazeBridge.logClick("play-button-screen-" + screen);
         brazeBridge.requestImmediateDataFlush();
 
-        brazeBridge.logClick("play-button-screen-" + screen);
       });
 
       document.addEventListener("option-selected", async function () {
-        brazeBridge.requestImmediateDataFlush();
-
         brazeBridge.logClick("option-selected");
+        brazeBridge.requestImmediateDataFlush();
       });
     },
     false
