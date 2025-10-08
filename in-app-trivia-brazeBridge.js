@@ -8,11 +8,13 @@
 
   // Simulate brazeBridge for testing purposes
 
-  const brazeBridge = global.brazeBridge;
-
+  
   window.addEventListener(
     "ab.BridgeReady",
+
     function () {
+      const brazeBridge = global.brazeBridge;
+
       brazeBridge.logCustomEvent("trivia-impression");
       brazeBridge.requestImmediateDataFlush();
 
@@ -27,7 +29,6 @@
       const tooMuchDelayAbortBtn = document.getElementById(
         "too-much-delay-abandon-btn"
       );
-      const brazeBridge = global.brazeBridge;
       console.log("Braze bridge", brazeBridge);
       closeButton.addEventListener("click", function () {
         brazeBridge.logClick("close-button");
