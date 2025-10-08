@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Garage Gothic Bold";
+  src: url("https://github.com/ObedCabanzo/public-assets/raw/refs/heads/main/trivia/fonts/in-app-trivia-font-Garage%20Gothic%20Bold.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LemonMilk Bold";
+  src: url("https://github.com/ObedCabanzo/public-assets/raw/refs/heads/main/trivia/fonts/in-app-trivia-font-LEMONMILK-Bold.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+  
+}
+
+
+

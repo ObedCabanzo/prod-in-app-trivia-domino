@@ -1,0 +1,264 @@
+<html lang="es">
+  <title>In-App Trivia</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tailwind CDN (ojo: <script> debe cerrarse) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CSS (MIME correcto desde jsDelivr) -->
+    <link rel="stylesheet" href="/in-app-trivia-fonts.css" />
+    <link rel="stylesheet" href="/in-app-trivia-styles.css" />
+    <script type="module" src="/in-app-trivia-video-handler.js"></script>
+
+    <!-- JS clásicos -->
+    <script src="/in-app-trivia-preload.js" defer></script>
+    <script src="/in-app-trivia-sound.js" defer></script>
+    <script src="/in-app-trivia-metadata.js" defer></script>
+    <script src="/in-app-trivia-dom-ref.js" defer></script>
+    <script src="/in-app-trivia-utils.js" defer></script>
+    <script src="/in-app-trivia-screen-loading.js" defer></script>
+    <script src="/in-app-trivia-screen-0.js" defer></script>
+    <script src="/in-app-trivia-screen-1.js" defer></script>
+    <script src="/in-app-trivia-screen-2.js" defer></script>
+    <script src="/in-app-trivia-screen-3.js" defer></script>
+    <script src="/in-app-trivia-screen-4.js" defer></script>
+    <script src="/in-app-trivia-screen-5.js" defer></script>
+    <script src="/in-app-trivia-screen-6.js" defer></script>
+    <script src="/in-app-trivia-wiring.js" defer></script>
+    <script src="/in-app-trivia-brazeBridge.js" defer></script>
+
+    <!-- Módulo: requiere CORS permitido (jsDelivr lo da) -->
+  </head>
+  <body
+    class="bg-black flex flex-col items-center justify-center px-4 overflow-hidden"
+  >
+    <div id="metadata" hidden>
+      <div
+        id="meta-user"
+        data-user-id="user-identifier"
+        data-device-uuid="device-uuid"
+        data-streak-days="2025-10-06_"
+      ></div>
+      <div
+        id="meta-question"
+        data-question-text="¿QUÉ TIENEN EN COMÚN CROCANTITOW, CLASICOW Y DERRETIDOW?"
+        data-options='LLEVAN BRISKET;TERMINAN EN "OW";SE LEEN COMO GRINGO'
+        data-question-answer="2"
+        data-question-type="normal"
+        data-question-sound="none"
+      ></div>
+      <div
+        id="meta-config"
+        data-deeplink="domino.cl://offers"
+        data-initial-date="2025-10-06"
+        data-final-date="2025-10-17"
+        data-current-date="2025-10-07"
+        data-token="4bce86ae4d735c4bc20c67e2338a4a3bbc66eb98"
+        data-api-endpoint="http://localhost"
+        data-code-coupon-10="coupon_10"
+        data-code-coupon-20="coupon_20"
+        data-code-coupon-40="coupon_40"
+        data-code-coupon-free="coupon_free"
+      ></div>
+    </div>
+    <div
+      id="loading-screen"
+      class="absolute flex items-center justify-center z-[1000] w-full h-full bg-black"
+    >
+      <div class="flex items-center gap-[2vw] h-auto w-auto">
+        <div class="dot h-[5vw] w-[5vw] rounded-full bg-[red]"></div>
+        <div
+          class="dot h-[5vw] w-[5vw] rounded-full bg-[red]"
+          style="animation-delay: 0.15s"
+        ></div>
+        <div
+          class="dot h-[5vw] w-[5vw] rounded-full bg-[red]"
+          style="animation-delay: 0.3s"
+        ></div>
+      </div>
+      <div
+        id="progress-bar"
+        class="w-[80vw] bottom-[42vh] h-[1vh] bg-white rounded-full overflow-hidden absolute"
+      >
+        <div
+          id="progress-fill"
+          class="h-[100%] bg-[#eb422b] w-0 rounded-full transition-all duration-500"
+        ></div>
+      </div>
+      <div
+        id="loading-text"
+        class="absolute w-[70vw] top-[60vh] text-white text-[4vw] font-bold text-center transition-all duration-250"
+      >
+        Espera un poco, estamos preparando un reto para ti, podrás obtener
+        muchos premios
+      </div>
+      <div
+        id="loading-button"
+        class="absolute w-[80vw] flex flex-col bottom-[5vh] gap-2 opacity-0 hidden transition-all duration-500"
+      >
+        <h1 class="font-bold text-white text-center">
+          Está tomando más tiempo de lo esperado...
+        </h1>
+        <button
+          id="too-much-delay-abandon-btn"
+          class="bg-[#eb422b] text-white py-2 px-4 rounded-lg"
+        >
+          Toca para abandonar el reto
+        </button>
+      </div>
+      <!-- Overlay OFFLINE “irruptivo” -->
+      <div
+        id="offline-overlay"
+        class="absolute inset-0 bg-black flex flex-col items-center justify-center gap-6 p-6 hidden"
+      >
+        <p class="text-white text-center font-bold text-[4vw] leading-tight">
+          Parece que no tienes conexión a internet, reintentando...
+        </p>
+        <div class="flex items-center gap-3">
+          <button
+            id="offline-abort"
+            class="bg-white text-black py-2 px-4 rounded-lg font-semibold"
+          >
+            Abandonar reto
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="no-connection-screen"
+      class="w-full h-full absolute z-50 hidden"
+    ></div>
+
+    <button
+      id="close-button"
+      class="w-[12vw] h-auto absolute top-[8vh] right-[4vw] z-[100] opacity-0"
+    >
+      <img
+        src="https://raw.githubusercontent.com/ObedCabanzo/public-assets/main/trivia/images/close.png"
+        alt="Close"
+        class="w-full h-full"
+      />
+    </button>
+
+    <div
+      class="h-full w-[100%] absolute z-1 background-container hidden"
+      id="bg-container"
+    >
+      <video
+        id="bg-video"
+        src="https://dl.dropboxusercontent.com/scl/fi/b0paaqu29vknt85xp0lap/background.mp4?rlkey=9ndjdqoer1ceitmdq5wsmuvum&st=b3y4sjhl&dl=0"
+        autoplay
+        muted
+        loop
+        playsinline
+        style="width: 100%; height: 100%; object-fit: cover"
+      ></video>
+    </div>
+    <div
+      id="title-gif-container"
+      class="absolute w-full h-auto flex items-center justify-center z-[10] hidden"
+    >
+      <img id="title-gif-entry" alt="Title" class="w-[80vw]" />
+      <img
+        id="title-gif-bucle"
+        alt="Title"
+        class="w-[80vw] absolute opacity-0"
+      />
+    </div>
+    <div
+      id="cagula-container"
+      class="w-full h-[60vh] absolute bottom-[10vh] opacity-0 z-[10] flex flex-col justify-center items-center gap-8"
+    >
+      <div
+        id="map-container"
+        class="w-[95%] flex flex-col justify-start items-center py-4 scroll-hidden relative screen-2 border-4 border-[#eb422b] mx-4 rounded-3xl"
+      >
+        <span
+          id="calendar-frame-left"
+          class="absolute h-[5vh] w-[2.5vh] border-4 border-[#eb422b] -top-5 rounded-3xl left-4"
+        ></span>
+        <span
+          id="calendar-frame-right"
+          class="absolute h-[5vh] w-[2.5vh] border-4 border-[#eb422b] -top-5 rounded-3xl right-4"
+        ></span>
+
+        <div
+          id="map-container-september"
+          class="flex flex-col justify-center items-center gap-2"
+        ></div>
+        <div id="map-container-october"></div>
+      </div>
+
+      <div
+        id="cagula"
+        class="h-[40%] w-[80vw] flex flex-col justify-start items-center px-[4vw]"
+      >
+        <h1 class="title-cagula-main mt-[5%]">¡HORA DEL DESAFIO</h1>
+        <h1 class="title-cagula-main mb-[1vh]">DE HOY!</h1>
+
+        <h1 class="title-cagula-secondary">
+          RESPONDE BIEN LA SIGUIENTE PREGUNTA Y GANA UNA SORPRESA
+        </h1>
+
+        <h1 class="title-cagula-third one">
+          PREGUNTAS Y SORPRESAS TODOS LOS DIAS
+        </h1>
+
+        <div class="flex flex-col justify-center items-center gap-2 mt-[4vh]">
+          <h1 class="title-cagula-third two">
+            RESPONDE CADA DÍA Y TU RACHA CRECERÁ
+          </h1>
+          <div
+            class="overflow-hidden bg-[#EB422B] px-8 title-cagula-third-container -skew-y-2 shadow-lg"
+          >
+            <h1 class="title-cagula-third three">¡SI NO LO HACES,</h1>
+          </div>
+
+          <h1 class="title-cagula-third four">VOLVERÁ A CERO!</h1>
+        </div>
+      </div>
+    </div>
+    <div
+      id="flame-gif-container"
+      class="absolute w-full h-auto flex items-center justify-center z-[10]"
+    ></div>
+    <div
+      id="characters-container"
+      class="absolute h-[20vh] w-auto flex items-center justify-center bottom-0 z-[11]"
+    ></div>
+
+    <div
+      class="absolute w-full h-[15vh] flex items-center justify-center bottom-0 z-[100] opacity-0 transition-all duration-500"
+      id="play-button-container"
+    >
+      <img
+        id="play-button-static"
+        src="https://raw.githubusercontent.com/ObedCabanzo/public-assets/main/trivia/images/play_button_static.png"
+        alt="Title"
+        class="absolute w-auto h-[100%] z-[11] hidden"
+      />
+      <img
+        id="play-button-gif"
+        src="https://raw.githubusercontent.com/ObedCabanzo/public-assets/main/trivia/gif/Boton_intro.gif"
+        alt="Icon"
+        class="w-auto h-[100%]"
+      />
+    </div>
+    <div id="question-container" class="absolute w-full h-auto z-[20]">
+      <div
+        id="clock-container"
+        class="w-full h-auto flex justify-center items-center"
+      >
+        <!-- Clock GIF will be appended here -->
+      </div>
+      <div id="question" class="w-full h-auto z-[20] absolute top-0"></div>
+    </div>
+
+    <div
+      id="options-container"
+      class="absolute bottom-[35vh] flex flex-col gap-2 w-full items-center justify-center h-auto z-[100]"
+    ></div>
+  </body>
+</html>
