@@ -29,18 +29,13 @@
   // Verifies if a string is a valid date in YYYY-MM-DD format and returns it in that format, if not returns ""
   function isADate(dateStr) {
     // Validar formato YYYY-M-D o YYYY-MM-DD con regex (permite 1 o 2 dígitos para mes y día)
-    console.log("dateStr:", dateStr);
-    console.log("dateStr type:", typeof dateStr);
-    console.log("dateStr length:", dateStr?.length);
-    console.log("dateStr JSON:", JSON.stringify(dateStr));
+
     
     // Convertir a string y limpiar espacios si es necesario
     const cleanDateStr = String(dateStr).trim();
-    console.log("cleanDateStr:", cleanDateStr);
     
     const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
     const testResult = dateRegex.test(cleanDateStr);
-    console.log("Regex test result:", testResult);
     
     if (!testResult) {
       return {response: false, date: ""};
@@ -50,7 +45,6 @@
 
   async function fifthScreen(response) {
     document.addEventListener("final-response", function (e) {
-      console.log("Braze brdge", brazeBridge);
       const today = new Date();
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -62,9 +56,6 @@
       const response = e.detail.response;
       const finalResult = gameResult();
       
-      console.log(isADate(currentDate));
-
-      console.log("Final-response-click");
       let prizeCode = "";
       if (finalResult === "all-correct") {
         brazeBridge.logCustomEvent("trivia-final-result-all-correct");
@@ -87,7 +78,6 @@
           .getUser()
           .addToCustomAttributeArray("trivia-streak-days", isADate(currentDate).response ? isADate(currentDate).date : formattedToday);
       }
-      console.log("Prize code to send:", prizeCode);
       brazeBridge.requestImmediateDataFlush();
 
       try {

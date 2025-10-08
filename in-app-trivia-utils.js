@@ -222,14 +222,12 @@
   async function generateMap() {
     startDate = new Date(global.App.metadata.config.initialDate);
     endDate = new Date(global.App.metadata.config.finalDate);
-    console.log("Generating map from", startDate, "to", endDate);
 
     const mapContainer = document.getElementById("map-container");
     const months = monthSlices(startDate, endDate);
 
     // For each month in startDate and endDate generate an object for month with the initial and end date of each month
     for (const month of months) {
-      console.log("Generating month:", month);
       const monthEl =
         document.getElementById(`map-container-${month.month}`) ||
         document.createElement("div");
@@ -260,7 +258,6 @@
       const titleDiv = document.createElement("div");
       const title = document.createElement("h1");
       title.classList.add("map-title");
-      console.log("Month:", month.month);
       if (month.month === "september") {
         title.textContent = "Septiembre";
       }
@@ -599,7 +596,6 @@
     const streakDays = global.App.metadata.streakDays || "";
     const finished = global.App.metadata.user.finished || false;
     let stop = false;
-    console.log("Streak days:", streakDays, "Finished:", finished);
 
     let count = 1;
     for (const mapUnit of allUnits) {
@@ -906,7 +902,6 @@
     classList = [],
     containerId = "gif-container-result"
   ) {
-    console.log("Appending gif with final image to", parentContainer);
     if (!parentContainer) return;
 
     const container = document.createElement("div");

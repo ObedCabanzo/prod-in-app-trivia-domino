@@ -29,7 +29,6 @@
       const tooMuchDelayAbortBtn = document.getElementById(
         "too-much-delay-abandon-btn"
       );
-      console.log("Braze bridge", brazeBridge);
       closeButton.addEventListener("click", function () {
         brazeBridge.logClick("close-button");
         brazeBridge.requestImmediateDataFlush();
@@ -37,7 +36,6 @@
       });
 
       if (offlineAbortBtn) {
-        console.log("offlineAbortBtn found");
         offlineAbortBtn.addEventListener("click", () => {
           // Si el host define un abort handler, úsalo; si no, emitimos evento
           brazeBridge.logClick("abort-button-offline");
@@ -47,7 +45,6 @@
       }
 
       if (tooMuchDelayAbortBtn) {
-        console.log("tooMuchDelayAbortBtn found");
         tooMuchDelayAbortBtn.addEventListener("click", () => {
           // Si el host define un abort handler, úsalo; si no, emitimos evento
           brazeBridge.logClick("abort-button-delay");
@@ -61,7 +58,7 @@
       );
 
       getCouponButton?.addEventListener("click", async function () {
-        console.log("Get coupon button clicked");
+
         updateClasses([{ element: getCouponButton, add: "scale-[0.8]" }]);
         await delay(200);
         updateClasses([{ element: getCouponButton, remove: "scale-[1]" }]);

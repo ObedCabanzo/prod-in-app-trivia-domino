@@ -15,7 +15,6 @@
     if (ctlBackground && typeof ctlBackground.play === "function") {
       ctlBackground.pause();
       delay(10000).then(() => {
-        console.log("loop added")
         ctlBackground.setLoopByTime(10, 19);
       })
       

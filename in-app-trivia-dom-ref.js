@@ -241,11 +241,9 @@ const allUrls = {
 
   const streakDays = global.App.metadata.streakDays;
   const updateStreak = (gameResult) => {
-    console.log("Game result:", gameResult);
     global.App.metadata.config.result = gameResult;
   
     if (gameResult === "correct") {
-      console.log("Incrementing strea0kDays");
       global.App.metadata.streakDays = updateStringIndex(
         global.App.metadata.streakDays,
         global.App.metadata.config.daysPassed - 1,
@@ -253,7 +251,6 @@ const allUrls = {
       );
 
     }
-    console.log("Updated streakDays:", global.App.metadata.streakDays);
   };
 
   const updateStringIndex = (str, index, newChar) => {
@@ -265,10 +262,8 @@ const allUrls = {
 
   const updateUserFinished = (finished) => {
     global.App.metadata.user.finished = finished;
-    console.log("User finished status updated to:", finished);
   };
   function updateResponse(response)  {
-    console.log("Updating response:", response);
     global.App.metadata.config.result = response;
   }
 
@@ -279,17 +274,11 @@ const allUrls = {
     const someCorrect = global.App.metadata.streakDays.includes('1');
     const finalResponse = global.App.metadata.config.result;
     
-    console.log("isLastDay:", isLastDay);
-    console.log("streakDays:", global.App.metadata.streakDays);
-    console.log("allCorrect:", allCorrect);
-    console.log("someCorrect:", someCorrect);
-    console.log("finalResponse:", finalResponse);
+
     if (isLastDay) {
       if (allCorrect) {
-        console.log("User got all answers correct!");
         return "all-correct";
       } else if (someCorrect) {
-        console.log("User got some answers correct.");
         return "some-correct";
       }
     } else  {

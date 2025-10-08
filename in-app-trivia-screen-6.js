@@ -55,7 +55,6 @@
       },
     ]);
     const finalResult = gameResult();
-    console.log("Final Result:", finalResult);
     if (global.App.metadata.config.gameFinished) {
       body.appendChild(streakCompleted);
     } else {

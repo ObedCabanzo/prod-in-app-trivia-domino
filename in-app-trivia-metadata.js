@@ -7,9 +7,6 @@
     // Helper: convierte fecha a YYYY-MM-DD
     const toKey = (date) => date.toISOString().split("T")[0]; // siempre da formato YYYY-MM-DD
 
-    console.log("fechaStr:", fechaStr);
-    console.log("fechaInicio:", fechaInicio);
-    console.log("fechaFin:", fechaFin);
     // 1. Parsear las fechas del string y normalizar
     const fechasArray = fechaStr
       .split("_")
@@ -25,7 +22,6 @@
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       const existe = fechasSet.has(toKey(d));
-      console.log(toKey(d), existe);
       resultado += existe ? "1" : "0";
     }
 
@@ -59,9 +55,7 @@
   const dd = String(today.getDate()).padStart(2, "0");
   const formattedToday = `${yyyy}-${mm}-${dd}`;
 
-  console.log("Fecha actual:", formattedToday);
-  console.log("Fecha lanzamiento:", metadata.config?.initialDate);
-  console.log("Fecha actual:", metadata.config?.currentDate );
+
 
 
 
@@ -86,8 +80,6 @@
   const cleanCurrentDate = String(metadata.config?.currentDate).trim().replace(/-0/g, "-");
   metadata.config.gameFinished = cleanFinalDate === cleanCurrentDate;
 
-  console.log("Last day:", metadata.config.gameFinished);
-  console.log(metadata)
 
   // lo haces global explícitamente
   global.App.metadata = metadata;

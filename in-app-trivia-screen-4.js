@@ -231,9 +231,6 @@
 
     setTimeout(() => {
       global.SoundAPI.stop("timer1");
-      console.log("Time out");
-      console.log("readyToAnswer", readyToAnswer);
-      console.log("answered", answered);
       if (answered) return;
       answered = true;
       global.App.screens.screen5.run("not-answered");
