@@ -42,7 +42,29 @@
     "duration-1000",
   ];
   async function sixthScreen(response) {
-    const gifContainerResult = document.getElementById("gif-container-result");
+    incScreen();
+    ctlBackground.setLoopByTime(10, 19);
+    updateClasses([
+      {
+        element: titleGifContainer,
+        remove: ["screen-5-1", "screen-4-1"],
+        add: "screen-6-1",
+      },
+
+      {
+        element: cagulaContainer,
+        remove: ["screen-4-1", "hidden"],
+        add: "screen-6-1",
+      },
+      { element: incorrectGif, add: "opacity-0" },
+      { element: correctGif, add: "opacity-0" },
+      { element: winCouponGif, add: "opacity-0" },
+      { element: loseCouponGif, add: "opacity-0" },
+      { element: timeOverGif, add: ["opacity-0", "hidden"] },
+      { element: flameSad, add: "opacity-0" },
+      { element: cagula, add: "hidden" },
+      { element: clockContainer, add: "hidden" },
+    ]);
 
     updateClasses([
       {
@@ -84,22 +106,8 @@
         2000,
         bottomGifClasses
       );
-      appendGifWithFinalImage(
-        gifContainerResult,
-        allUrls.gifs.askButton,
-        allUrls.images.askButtonFinal,
-        2000,
-        [
-          "bottom-[0%]",
-          "left-[20%]",
-          "absolute",
-          "w-[50%]",
-          "h-[30%]",
-          "transition-all",
-        ],
-        "get-coupon-button-container"
-      );
     }
+    const gifContainerResult = document.getElementById("gif-container-result");
     updateClasses([
       {
         element: gifContainerResult,
@@ -121,61 +129,35 @@
         "transition-all",
       ],
       "get-coupon-button-container"
-    );
+    ).then(() => {
+      const getCouponButton = document.getElementById(
+        "get-coupon-button-container"
+      );
 
-    const getCouponButton = document.getElementById(
-      "get-coupon-button-container"
-    );
+      console.log("Get coupon button element:", getCouponButton);
 
-    console.log("Get coupon button element:", getCouponButton);
+      console.log("Get coupon button element:", getCouponButton);
+      updateClasses([{ element: getCouponButton, add: "z-[20]" }]);
 
-    getCouponButton?.addEventListener("click", async function () {
-      console.log("Get coupon button clicked");
-      updateClasses([
-        { element: getCouponButton, add: "scale-[0.8]", remove: "scale-[1]" },
-      ]);
-      await delay(200);
-      updateClasses([
-        { element: getCouponButton, add: "scale-[1]", remove: "scale-[0.8]" },
-      ]);
-      const deeplinkUrl =
-        global.App.metadata.config.deeplink || "domino.cl://offers";
-      global.location.href = deeplinkUrl;
-      if (global.brazeBridge) {
-        global.brazeBridge.logClick("get-coupon-button");
-        global.brazeBridge.closeMessage();
-      }
+      getCouponButton.addEventListener("click", async function () {
+        console.log("Get coupon button clicked");
+        updateClasses([
+          { element: getCouponButton, add: "scale-[0.8]", remove: "scale-[1]" },
+        ]);
+        await delay(200);
+        updateClasses([
+          { element: getCouponButton, add: "scale-[1]", remove: "scale-[0.8]" },
+        ]);
+        const deeplinkUrl =
+          global.App.metadata.config.deeplink || "domino.cl://offers";
+        global.location.href = deeplinkUrl;
+        if (global.brazeBridge) {
+          global.brazeBridge.logClick("get-coupon-button");
+          global.brazeBridge.closeMessage();
+        }
+      });
     });
 
-    
-    incScreen();
-    ctlBackground.setLoopByTime(10, 19);
-    updateClasses([
-      {
-        element: titleGifContainer,
-        remove: ["screen-5-1", "screen-4-1"],
-        add: "screen-6-1",
-      },
-
-      {
-        element: cagulaContainer,
-        remove: ["screen-4-1", "hidden"],
-        add: "screen-6-1",
-      },
-      { element: incorrectGif, add: "opacity-0" },
-      { element: correctGif, add: "opacity-0" },
-      { element: winCouponGif, add: "opacity-0" },
-      { element: loseCouponGif, add: "opacity-0" },
-      { element: timeOverGif, add: ["opacity-0", "hidden"] },
-      { element: flameSad, add: "opacity-0" },
-      { element: cagula, add: "hidden" },
-      { element: clockContainer, add: "hidden" },
-      {
-        element: mapContainer,
-        remove: ["hidden", "screen-3-1"],
-        add: "screen-6-1",
-      },
-    ]);
     delay(1500).then(() => {
       const finalMessageContainer = document.createElement("div");
       finalMessageContainer.id = "final-message-container";
@@ -189,6 +171,13 @@
         },
       ]);
     });
+    updateClasses([
+      {
+        element: mapContainer,
+        remove: ["hidden", "screen-3-1"],
+        add: "screen-6-1",
+      },
+    ]);
     const octClasses = [
       "flex",
       "flex-col",
