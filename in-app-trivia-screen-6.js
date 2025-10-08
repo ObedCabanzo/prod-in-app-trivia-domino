@@ -86,20 +86,20 @@
         bottomGifClasses
       );
       appendGifWithFinalImage(
-      gifContainerResult,
-      allUrls.gifs.askButton,
-      allUrls.images.askButtonFinal,
-      2000,
-      [
-        "bottom-[0%]",
-        "left-[20%]",
-        "absolute",
-        "w-[50%]",
-        "h-[30%]",
-        "transition-all",
-      ],
-      "get-coupon-button-container"
-    );
+        gifContainerResult,
+        allUrls.gifs.askButton,
+        allUrls.images.askButtonFinal,
+        2000,
+        [
+          "bottom-[0%]",
+          "left-[20%]",
+          "absolute",
+          "w-[50%]",
+          "h-[30%]",
+          "transition-all",
+        ],
+        "get-coupon-button-container"
+      );
     }
     updateClasses([
       {
@@ -128,17 +128,21 @@
       "get-coupon-button-container"
     );
 
-
     console.log("Get coupon button element:", getCouponButton);
 
     getCouponButton?.addEventListener("click", async function () {
       console.log("Get coupon button clicked");
-      updateClasses([{ element: getCouponButton, add: "scale-[0.8]", remove: "scale-[1]"}]); 
+      updateClasses([
+        { element: getCouponButton, add: "scale-[0.8]", remove: "scale-[1]" },
+      ]);
       await delay(200);
-      updateClasses([{ element: getCouponButton, add: "scale-[1]", remove: "scale-[0.8]"}]);
-      const deeplinkUrl = global.App.metadata.config.deeplink || "domino.cl://offers";
+      updateClasses([
+        { element: getCouponButton, add: "scale-[1]", remove: "scale-[0.8]" },
+      ]);
+      const deeplinkUrl =
+        global.App.metadata.config.deeplink || "domino.cl://offers";
       global.location.href = deeplinkUrl;
-      if (global.brazeBridge){
+      if (global.brazeBridge) {
         global.brazeBridge.logClick("get-coupon-button");
         global.brazeBridge.closeMessage();
       }
