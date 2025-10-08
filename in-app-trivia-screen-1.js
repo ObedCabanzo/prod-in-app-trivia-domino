@@ -21,6 +21,7 @@
     global.App.loadingScreen || {};
 
   async function zeroScreen() {
+    
     document.addEventListener("assetpreloader:setcomplete", (event) => {
       if (event.detail.setIndex === 0) {
         console.log("Assets preloaded:", event.detail);
@@ -48,37 +49,7 @@
   }
 
   async function firstScreen() {
-    const offlineAbortBtn = document.getElementById("offline-abort");
-    const tooMuchDelayAbortBtn = document.getElementById(
-      "too-much-delay-abandon-btn"
-    );
-    const brazeBridge = global.brazeBridge;
-    console.log("Braze bridge", brazeBridge);
-    closeButton.addEventListener("click", function () {
-      brazeBridge.logClick("close-button");
-      brazeBridge.requestImmediateDataFlush();
-      brazeBridge.closeMessage();
-    });
-
-    if (offlineAbortBtn) {
-      console.log("offlineAbortBtn found");
-      offlineAbortBtn.addEventListener("click", () => {
-        // Si el host define un abort handler, úsalo; si no, emitimos evento
-        brazeBridge.logClick("abort-button-offline");
-        brazeBridge.requestImmediateDataFlush();
-        brazeBridge.closeMessage();
-      });
-    }
-
-    if (tooMuchDelayAbortBtn) {
-      console.log("tooMuchDelayAbortBtn found");
-      tooMuchDelayAbortBtn.addEventListener("click", () => {
-        // Si el host define un abort handler, úsalo; si no, emitimos evento
-        brazeBridge.logClick("abort-button-delay");
-        brazeBridge.requestImmediateDataFlush();
-        brazeBridge.closeMessage();
-      });
-    }
+    
 
     incScreen();
 

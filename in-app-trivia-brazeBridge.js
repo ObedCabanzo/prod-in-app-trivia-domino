@@ -23,7 +23,37 @@
         brazeBridge.closeMessage();
       });
 
-      
+      const offlineAbortBtn = document.getElementById("offline-abort");
+      const tooMuchDelayAbortBtn = document.getElementById(
+        "too-much-delay-abandon-btn"
+      );
+      const brazeBridge = global.brazeBridge;
+      console.log("Braze bridge", brazeBridge);
+      closeButton.addEventListener("click", function () {
+        brazeBridge.logClick("close-button");
+        brazeBridge.requestImmediateDataFlush();
+        brazeBridge.closeMessage();
+      });
+
+      if (offlineAbortBtn) {
+        console.log("offlineAbortBtn found");
+        offlineAbortBtn.addEventListener("click", () => {
+          // Si el host define un abort handler, úsalo; si no, emitimos evento
+          brazeBridge.logClick("abort-button-offline");
+          brazeBridge.requestImmediateDataFlush();
+          brazeBridge.closeMessage();
+        });
+      }
+
+      if (tooMuchDelayAbortBtn) {
+        console.log("tooMuchDelayAbortBtn found");
+        tooMuchDelayAbortBtn.addEventListener("click", () => {
+          // Si el host define un abort handler, úsalo; si no, emitimos evento
+          brazeBridge.logClick("abort-button-delay");
+          brazeBridge.requestImmediateDataFlush();
+          brazeBridge.closeMessage();
+        });
+      }
 
       const getCouponButton = document.getElementById(
         "get-coupon-button-container"
@@ -44,7 +74,6 @@
       playButtonStatic.addEventListener("click", function () {
         brazeBridge.logClick("play-button-screen-" + screen);
         brazeBridge.requestImmediateDataFlush();
-
       });
 
       document.addEventListener("option-selected", async function () {
